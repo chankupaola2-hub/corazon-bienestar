@@ -1,0 +1,1880 @@
+<!doctype html>
+<html lang="es">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Corazón Bienestar - Tu asistente de salud personal">
+  <title>Corazón Bienestar</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafb;
+      overflow: hidden;
+    }
+
+    body {
+      box-sizing: border-box;
+    }
+
+    .gradient-bg-emerald {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .gradient-bg-forest {
+      background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+    }
+
+    .screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      overflow-y: auto;
+      background: #fff;
+    }
+
+    .screen.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(4, 120, 87, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .back-btn {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .header-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-back h2 {
+      color: white;
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.3s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .content-section {
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .selector-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .selector-btn {
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    .selector-btn:hover {
+      border-color: #10b981;
+    }
+
+    .selector-btn.selected {
+      background: #047857;
+      color: white;
+      border-color: #047857;
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .icon-btn {
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      font-family: inherit;
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      color: #047857;
+    }
+
+    .icon-btn:active {
+      transform: scale(0.95);
+    }
+
+    .icon-btn span:first-child {
+      font-size: 28px;
+    }
+
+    .icon-btn-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #047857;
+    }
+
+    .sos-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 16px;
+      animation: pulse 2s infinite;
+      font-family: inherit;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      max-width: 100%;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .camera-preview {
+      width: 100%;
+      border-radius: 12px;
+      margin: 12px 0;
+      max-height: 400px;
+      object-fit: cover;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    #cameraVideo {
+      width: 100%;
+      max-height: 400px;
+      border-radius: 12px;
+      margin: 12px 0;
+      object-fit: cover;
+      display: block;
+      background: #000;
+      -webkit-transform: scaleX(-1);
+      transform: scaleX(-1);
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .camera-btn-overlay {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s;
+    }
+
+    .camera-btn-overlay:hover {
+      background: white;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-photo-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px;
+    }
+
+    .profile-photo {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #e5e7eb;
+    }
+
+    .sound-btn {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    .sound-btn:hover {
+      border-color: #10b981;
+    }
+
+    .sound-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .sound-title {
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 4px;
+    }
+
+    .sound-desc {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .delete-btn {
+      background: #fee2e2;
+      color: #991b1b;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 18px;
+      transition: all 0.3s;
+    }
+
+    .delete-btn:hover {
+      background: #fecaca;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1f2937;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      z-index: 2000;
+      transition: bottom 0.3s ease;
+      max-width: 90%;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .toast.show {
+      bottom: 20px;
+    }
+
+    .toggle-switch {
+      width: 50px;
+      height: 28px;
+      background: #e5e7eb;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .toggle-switch.active {
+      background: #10b981;
+    }
+
+    .toggle-knob {
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: left 0.3s;
+    }
+
+    .toggle-switch.active .toggle-knob {
+      left: 24px;
+    }
+
+    .med-item {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .emergency-numbers {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .emergency-numbers h4 {
+      color: white;
+      font-weight: bold;
+      margin: 0 0 12px 0;
+      font-size: 15px;
+    }
+
+    .emergency-number {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .emergency-number p {
+      color: white;
+      margin: 0;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .emergency-number button {
+      background: white;
+      color: #047857;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+      transition: all 0.3s;
+    }
+
+    .emergency-number button:hover {
+      transform: scale(1.05);
+      background: #f0fdf4;
+    }
+
+    .date-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .date-inputs input {
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .user-profile-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+
+    .user-profile-photo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid white;
+      flex-shrink: 0;
+    }
+
+    .user-profile-info {
+      flex: 1;
+    }
+
+    .user-profile-info p {
+      color: white;
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .user-profile-info .name {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .star {
+      cursor: pointer;
+      transition: color 0.3s;
+      color: #d1d5db;
+    }
+
+    .star.filled {
+      color: #fbbf24;
+    }
+
+    .calendar-day {
+      text-align: center;
+      padding: 8px;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+
+    .calendar-day.today {
+      background: #10b981;
+      color: white;
+      font-weight: bold;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .med-type-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .med-type-input:focus {
+      outline: none;
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    .logo-img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .motivation-msg {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      color: #047857;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 12px 0;
+      font-weight: 600;
+      text-align: center;
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body><!-- SPLASH -->
+  <div id="splash" class="screen active gradient-bg-emerald" style="display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px;"><img src="https://i.ibb.co/xKzk7SCJ/Whats-App-Image-2026-02-07-at-2-58-01-AM-removebg-preview.png" alt="Logo Corazón Bienestar" style="width: 250px; height: 250px; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));" loading="lazy" onerror="this.style.background='#fff'; this.style.borderRadius='50%';">
+   <h1 style="color: white; font-size: 32px; text-align: center; margin-bottom: 10px; font-weight: bold;">Corazón Bienestar</h1>
+   <p style="color: black(255,255,255,0.9); text-align: center; margin-bottom: 40px; font-size: 16px;">Tu asistente de salud personal</p><button class="btn btn-primary" onclick="goToScreen('welcome')">Comenzar</button>
+  </div><!-- WELCOME -->
+  <div id="welcome" class="screen gradient-bg-emerald" style="display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px; overflow-y: auto;">
+   <div style="font-size: 60px; margin-bottom: 20px; animation: bounce 2s infinite;">
+    💊
+   </div>
+   <h2 style="color: black; font-size: 28px; text-align: center; margin-bottom: 15px; font-weight: bold;">¡Bienvenido!</h2>
+   <p style="color: black(255,255,255,0.9); text-align: center; margin-bottom: 30px; font-size: 15px;">Vamos a configurar tu perfil de salud</p><button class="btn btn-primary" onclick="goToScreen('profile')" style="margin-top: 20px;">Siguiente →</button>
+  </div><!-- PROFILE SETUP -->
+  <div id="profile" class="screen gradient-bg-emerald" style="padding-top: 80px; padding-bottom: 80px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px 16px 12px; z-index: 10; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+     <h2 style="color: white; font-size: 20px; margin: 0; font-weight: bold;">Crea tu Perfil</h2>
+     <p style="color: rgba(255,255,255,0.8); margin: 4px 0 0 0; font-size: 13px;">Información personal</p>
+    </div><img src="https://i.ibb.co/kgkQrNTZ/Logo-Marca-Personal-Moderno-Tipogr-fico-Blanco-y-Negro-. -0001-removebg-preview.png" alt="Logo" class="logo-img" loading="lazy">
+   </div>
+   <div style="padding: 16px; background: transparent;">
+    <div class="profile-photo-container"><img id="profilePhotoImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect fill='%23f0f0f0' width='100' height='100'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23999'/%3E%3Cpath d='M20 100 Q20 60 50 60 Q80 60 80 100' fill='%23999'/%3E%3C/svg%3E" class="profile-photo" alt="Foto"> <button class="camera-btn-overlay" onclick="openCamera('profile')">📷</button>
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Nombre</label> <input type="text" id="userName" class="input-field" placeholder="Tu nombre" autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Edad</label> <input type="number" id="userAge" class="input-field" placeholder="60" min="1" max="120" autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Fecha de Nacimiento</label>
+     <div class="date-inputs"><input type="number" id="birthDay" placeholder="Día" min="1" max="31" autocomplete="off"> <input type="number" id="birthMonth" placeholder="Mes" min="1" max="12" autocomplete="off"> <input type="number" id="birthYear" placeholder="Año" min="1900" max="2025" autocomplete="off">
+     </div>
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Peso (kg)</label> <input type="number" id="userWeight" class="input-field" step="0.1" placeholder="70" autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Estatura (cm)</label> <input type="number" id="userHeight" class="input-field" placeholder="170" autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937; display: block; margin-bottom: 8px;">Sexo</label>
+     <div class="selector-grid"><button class="selector-btn" onclick="selectSex('M', this)">♂️ Hombre</button> <button class="selector-btn" onclick="selectSex('F', this)">♀️ Mujer</button>
+     </div>
+    </div><button class="btn btn-primary" onclick="saveProfile()" style="margin-top: 20px; margin-bottom: 20px; width: 100%;">Siguiente →</button>
+   </div>
+  </div><!-- PROFILE CREATED -->
+  <div id="profileCreated" class="screen gradient-bg-emerald" style="display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 20px;">
+   <div style="font-size: 60px; margin-bottom: 20px; animation: bounce 1s;">
+    ✓
+   </div>
+   <h2 style="color: white; font-size: 28px; text-align: center; margin-bottom: 15px; font-weight: bold;">¡Perfil Creado!</h2>
+   <p style="color: black(255,255,255,0.9); text-align: center; margin-bottom: 30px; font-size: 15px;">Primer paso hacia una vida más saludable</p>
+  </div><!-- SOUND SETUP -->
+  <div id="soundSetup" class="screen" style="padding-top: 80px; padding-bottom: 80px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10; text-align: center;">
+    <h2 style="color: white; font-size: 20px; margin: 0; font-weight: bold;">🔔 Tu Tono de Recordatorio</h2>
+    <p style="color: rgba(255,255,255,0.8); margin: 4px 0 0 0; font-size: 13px;">Elige un sonido</p>
+   </div>
+   <div style="padding: 16px;"><button class="sound-btn" onclick="testSound(0); selectSound(0, this)">
+     <div class="sound-icon">
+      🔔
+     </div>
+     <div class="sound-title">
+      Sonido Suave
+     </div>
+     <div class="sound-desc">
+      Melodía elegante
+     </div></button> <button class="sound-btn" onclick="testSound(1); selectSound(1, this)">
+     <div class="sound-icon">
+      🎵
+     </div>
+     <div class="sound-title">
+      Melodía Calmante
+     </div>
+     <div class="sound-desc">
+      Relajante
+     </div></button> <button class="sound-btn" onclick="testSound(2); selectSound(2, this)">
+     <div class="sound-icon">
+      🎼
+     </div>
+     <div class="sound-title">
+      Clásico
+     </div>
+     <div class="sound-desc">
+      Timbre tradicional
+     </div></button> <button class="sound-btn" onclick="testSound(3); selectSound(3, this)">
+     <div class="sound-icon">
+      📢
+     </div>
+     <div class="sound-title">
+      Digital
+     </div>
+     <div class="sound-desc">
+      Moderno y claro
+     </div></button> <button class="sound-btn" onclick="testSound(4); selectSound(4, this)">
+     <div class="sound-icon">
+      🚨
+     </div>
+     <div class="sound-title">
+      Alarma SOS
+     </div>
+     <div class="sound-desc">
+      No la ignorarás
+     </div></button> <button class="btn btn-primary" onclick="goToScreen('home')" style="margin-top: 20px; margin-bottom: 20px; width: 100%;">Continuar →</button>
+   </div>
+  </div><!-- HOME -->
+  <div id="home" class="screen" style="padding-top: 120px; padding-bottom: 40px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+     <div style="flex: 1;">
+      <p style="color: rgba(255,255,255,0.8); font-size: 12px; margin: 0;">Hoy es</p>
+      <h2 id="todayDate" style="color: white; font-size: 16px; margin: 4px 0; font-weight: bold;">Lunes, 3 de Enero</h2>
+      <p id="currentTime" style="color: rgba(255,255,255,0.8); font-size: 12px; margin: 3px 0 0 0;">14:30</p>
+     </div><img src="https://i.ibb.co/kgkQrNTZ/Logo-Marca-Personal-Moderno-Tipogr-fico-Blanco-y-Negro-. -0001-removebg-preview.png" alt="Logo" class="logo-img" loading="lazy">
+    </div>
+    <div class="user-profile-header" onclick="showUserProfile()"><img id="headerProfilePhoto" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Crect fill='%23f0f0f0' width='50' height='50'/%3E%3Ccircle cx='25' cy='18' r='8' fill='%23999'/%3E%3Cpath d='M10 50 Q10 35 25 35 Q40 35 40 50' fill='%23999'/%3E%3C/svg%3E" class="user-profile-photo" alt="Tu foto">
+     <div class="user-profile-info">
+      <p class="name" id="headerUserName">Mi Perfil</p>
+      <p id="headerUserAge">--</p>
+     </div>
+     <div style="text-align: right;">
+      <p style="font-size: 24px; margin: 0;">→</p>
+     </div>
+    </div>
+   </div>
+   <div style="padding: 15px 16px 5px 16px;">
+    <div style="background: white; border-radius: 16px; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #f3f4f6;">
+     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><span style="font-weight: bold; font-size: 14px; color: #1f2937;">Calendario</span> <span style="font-size: 12px; color: #10b981; font-weight: 500;">Hoy</span>
+     </div>
+     <div id="calendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center;">
+     </div>
+    </div>
+   </div>
+   <div style="padding: 12px;">
+    <div class="icon-grid"><button class="icon-btn" onclick="goToScreen('addMed')" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #047857;"> <span>➕</span> <span class="icon-btn-label">Añadir Med.</span> </button> <button class="icon-btn" onclick="goToScreen('medList')" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #047857;"> <span>💊</span> <span class="icon-btn-label">Medicinas</span> </button> <button class="icon-btn" onclick="goToScreen('appointments')" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #047857;"> <span>👨‍⚕️</span> <span class="icon-btn-label">Mi Doctor</span> </button> <button class="icon-btn" onclick="goToScreen('progress')" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #047857;"> <span>📊</span> <span class="icon-btn-label">Progreso</span> </button> <button class="icon-btn" onclick="goToScreen('notes')" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #047857;"> <span>📝</span> <span class="icon-btn-label">Notas</span> </button> <button class="icon-btn" onclick="goToScreen('health60')" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #047857;"> <span>❤️+60</span> <span class="icon-btn-label">Salud +60</span> </button> <button class="icon-btn" onclick="goToScreen('exercise')" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #047857;"> <span>🏥</span> <span class="icon-btn-label">Cuidados</span> </button> <button class="icon-btn" onclick="goToScreen('emergency')" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #047857;"> <span>👥</span> <span class="icon-btn-label">Familia</span> </button>
+    </div><button class="sos-btn" onclick="triggerSOS()">🚨 PÁNICO SOS 🚨</button>
+   </div>
+  </div><!-- MODAL VER PERFIL -->
+  <div id="profileModal" class="modal">
+   <div class="modal-content">
+    <h3 style="font-weight: bold; color: #1f2937; margin-bottom: 16px;">Mi Perfil</h3>
+    <div style="text-align: center; margin-bottom: 20px;"><img id="profileModalPhoto" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect fill='%23f0f0f0' width='100' height='100'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%23999'/%3E%3Cpath d='M20 100 Q20 60 50 60 Q80 60 80 100' fill='%23999'/%3E%3C/svg%3E" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 12px;">
+     <h4 id="profileModalName" style="margin: 0; color: #1f2937; font-size: 18px;">--</h4>
+     <p id="profileModalAge" style="margin: 4px 0 0 0; color: #6b7280; font-size: 14px;">--</p>
+    </div>
+    <div class="card">
+     <p style="font-size: 12px; color: #6b7280; margin: 0 0 4px 0;">Sexo</p>
+     <p id="profileModalSex" style="font-weight: bold; color: #1f2937; margin: 0;">--</p>
+    </div>
+    <div class="card">
+     <p style="font-size: 12px; color: #6b7280; margin: 0 0 4px 0;">Peso</p>
+     <p id="profileModalWeight" style="font-weight: bold; color: #1f2937; margin: 0;">--</p>
+    </div>
+    <div class="card">
+     <p style="font-size: 12px; color: #6b7280; margin: 0 0 4px 0;">Estatura</p>
+     <p id="profileModalHeight" style="font-weight: bold; color: #1f2937; margin: 0;">--</p>
+    </div>
+    <div class="card">
+     <p style="font-size: 12px; color: #6b7280; margin: 0 0 4px 0;">Fecha de Nacimiento</p>
+     <p id="profileModalBirth" style="font-weight: bold; color: #1f2937; margin: 0;">--</p>
+    </div><button class="btn btn-primary" onclick="closeProfileModal()" style="width: 100%; margin-top: 16px;">Cerrar</button>
+   </div>
+  </div><!-- ADD MEDICATION -->
+  <div id="addMed" class="screen gradient-bg-emerald" style="padding-top: 40px; padding-bottom: 40px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10;">
+    <div class="header-back"><button class="back-btn" onclick="goBack()">←</button>
+     <h2>Añadir Medicamento</h2>
+    </div>
+   </div>
+   <div style="padding: 12px; background: transparent;">
+    <div class="content-section"><label style="font-weight: bold; font-size: 15px; color: #1f2937;">📷 Foto del Medicamento</label> <button onclick="openCamera('med')" class="btn" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #047857; border: 2px dashed #10b981; margin: 8px 0; padding: 15px; width: 100%;"> 📸 Tomar Foto </button> <img id="medPhotoImg" style="display: none; width: 100%; border-radius: 12px; margin-top: 8px;" alt="Medicamento">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Nombre</label> <input type="text" id="medName" class="input-field" placeholder="Ej: Ibuprofeno" autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Tipo</label> <input type="text" id="medType" class="med-type-input" placeholder="Ej: Tableta, Gotas, Cápsula, Inyección, etc." autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Frecuencia (horas)</label> <input type="number" id="medFrequency" class="input-field" placeholder="Ej: 8" min="1" max="24" autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Días de tratamiento</label> <input type="number" id="medDays" class="input-field" placeholder="30" min="1" max="365" autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Dosis</label> <input type="text" id="medDose" class="input-field" placeholder="Ej: 1 comprimido" autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">¿Para qué?</label> <input type="text" id="medReason" class="input-field" placeholder="Ej: Dolor de cabeza" autocomplete="off">
+    </div><button class="btn btn-primary" onclick="saveMedication()" style="margin-top: 20px; margin-bottom: 20px; width: 100%;">Siguiente →</button>
+   </div>
+  </div><!-- MEDICATIONS LIST -->
+  <div id="medList" class="screen gradient-bg-emerald" style="padding-top: 40px; padding-bottom: 20px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10;">
+    <div class="header-back"><button class="back-btn" onclick="goBack()">←</button>
+     <h2>Mis Medicamentos</h2>
+    </div>
+   </div>
+   <div style="padding: 16px; background: transparent;" id="medListContainer">
+    <p style="text-align: center; color: #9ca3af; margin-top: 20px;">Sin medicamentos añadidos</p>
+   </div>
+  </div><!-- APPOINTMENTS -->
+  <div id="appointments" class="screen gradient-bg-emerald" style="padding-top: 80px; padding-bottom: 40px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10; display: flex; justify-content: space-between; align-items: center;">
+    <div class="header-back" style="margin-bottom: 0;"><button class="back-btn" onclick="goBack()">←</button>
+     <h2 style="margin: 0;">Mi Médico</h2>
+    </div><button class="back-btn" onclick="goToScreen('addAppointment')" style="background: rgba(255,255,255,0.3); border: none;">➕</button>
+   </div>
+   <div style="padding: 16px; background: transparent;" id="appointmentsContainer">
+    <p style="text-align: center; color: #9ca3af; margin-top: 20px;">Sin citas médicas</p>
+   </div>
+  </div><!-- ADD APPOINTMENT -->
+  <div id="addAppointment" class="screen gradient-bg-emerald" style="padding-top: 80px; padding-bottom: 80px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10;">
+    <div class="header-back"><button class="back-btn" onclick="goBack()">←</button>
+     <h2>Nueva Cita</h2>
+    </div>
+   </div>
+   <div style="padding: 16px; background: transparent;">
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Doctor</label> <input type="text" id="doctorName" class="input-field" placeholder="Dr. Juan García" autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Día</label> <input type="date" id="appointmentDate" class="input-field">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Hora</label> <input type="time" id="appointmentTime" class="input-field">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Hospital</label> <input type="text" id="hospitalName" class="input-field" placeholder="Hospital Central" autocomplete="off">
+    </div>
+    <div class="card" style="display: flex; justify-content: space-between; align-items: center; border: none;"><span style="font-weight: bold; color: #1f2937;">Recordatorio</span> <button class="toggle-switch active" id="apptReminder" onclick="event.stopPropagation(); this.classList.toggle('active')">
+      <div class="toggle-knob"></div></button>
+    </div><button class="btn btn-primary" onclick="saveAppointment()" style="margin-top: 20px; margin-bottom: 20px; width: 100%;">Finalizar ✓</button>
+   </div>
+  </div><!-- PROGRESS -->
+  <div id="progress" class="screen gradient-bg-emerald" style="padding-top: 80px; padding-bottom: 40px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10;">
+    <div class="header-back"><button class="back-btn" onclick="goBack()">←</button>
+     <h2>Mi Progreso</h2>
+    </div>
+   </div>
+   <div style="padding: 16px; background: transparent;">
+    <div class="icon-grid" style="margin-bottom: 20px;">
+     <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <p style="font-size: 12px; color: #6b7280; margin: 0;">Pasos Hoy</p>
+      <p id="stepsDisplay" style="font-size: 28px; font-weight: bold; color: #10b981; margin: 4px 0;">0</p>
+      <p id="stepsDate" style="font-size: 11px; color: #9ca3af; margin: 0;">--</p>
+     </div>
+     <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <p style="font-size: 12px; color: #6b7280; margin: 0;">Medicamentos</p>
+      <p id="medsProgressDisplay" style="font-size: 28px; font-weight: bold; color: #0284c7; margin: 4px 0;">0/0</p>
+     </div>
+     <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <p style="font-size: 12px; color: #6b7280; margin: 0;">Peso</p>
+      <p id="weightDisplay" style="font-size: 28px; font-weight: bold; color: #f97316; margin: 4px 0;">--</p>
+     </div>
+     <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <p style="font-size: 12px; color: #6b7280; margin: 0;">Altura</p>
+      <p id="heightDisplay" style="font-size: 28px; font-weight: bold; color: #8b5cf6; margin: 4px 0;">--</p>
+     </div>
+    </div>
+    <div id="motivationContainer" style="margin-bottom: 12px;"></div>
+    <h3 style="font-weight: bold; color: #1f2937; margin-bottom: 8px;">⭐ Tu Calificación</h3>
+    <div class="card" style="text-align: center; border: none;">
+     <div style="font-size: 24px; letter-spacing: 8px;"><span class="star" onclick="rateStar(1)">★</span> <span class="star" onclick="rateStar(2)">★</span> <span class="star" onclick="rateStar(3)">★</span> <span class="star" onclick="rateStar(4)">★</span> <span class="star" onclick="rateStar(5)">★</span>
+     </div>
+     <p id="ratingMessage" style="font-size: 12px; color: #6b7280; margin-top: 8px; margin-bottom: 0;">Completa tus objetivos</p>
+    </div>
+   </div>
+  </div><!-- NOTES -->
+  <div id="notes" class="screen gradient-bg-emerald" style="padding-top: 80px; padding-bottom: 80px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10;">
+    <div class="header-back"><button class="back-btn" onclick="goBack()">←</button>
+     <h2>Mis Notas</h2>
+    </div>
+   </div>
+   <div style="padding: 16px; background: transparent;">
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Nueva Nota</label> <textarea id="noteText" class="input-field" placeholder="Escribe tu nota..." style="height: 120px; resize: none; font-family: inherit;" autocomplete="off"></textarea>
+    </div><button class="btn btn-primary" onclick="saveNote()" style="margin-bottom: 20px; width: 100%;">Guardar Nota</button>
+    <h3 style="font-weight: bold; color: #1f2937; margin-bottom: 8px;">Notas Guardadas</h3>
+    <div id="notesContainer" style="display: flex; flex-direction: column; gap: 10px;">
+     <p style="text-align: center; color: #9ca3af;">Sin notas</p>
+    </div>
+   </div>
+  </div><!-- HEALTH 60+ -->
+  <div id="health60" class="screen gradient-bg-emerald" style="padding-top: 80px; padding-bottom: 40px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10;">
+    <div class="header-back"><button class="back-btn" onclick="goBack()">←</button>
+     <h2>Salud +60 Años</h2>
+    </div>
+   </div>
+   <div style="padding: 16px; background: transparent;">
+    <div class="card" style="border-left: 5px solid #ef4444;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🫀 Presión Arterial</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Mantén 120/80 mmHg. Reduce sal.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #0284c7;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🚶 Actividad Física</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">150 min semanales de actividad.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #16a34a;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🥗 Alimentación</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Frutas, verduras, proteína, agua.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #8b5cf6;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">😴 Sueño</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">7-8 horas diarias. Rutina regular.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #f97316;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🧠 Salud Mental</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Socializa. Disfruta actividades.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #c41c3b;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🏥 Chequeos</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Chequeos anuales. Prevenir.</p>
+    </div>
+   </div>
+  </div><!-- CUIDADOS -->
+  <div id="exercise" class="screen gradient-bg-emerald" style="padding-top: 80px; padding-bottom: 40px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10;">
+    <div class="header-back"><button class="back-btn" onclick="goBack()">←</button>
+     <h2>Cuidados de Salud</h2>
+    </div>
+   </div>
+   <div style="padding: 16px; background: transparent;">
+    <h3 style="font-weight: bold; color: #1f2937; margin-bottom: 8px;">🍎 Alimentos para Adultos +60</h3>
+    <div class="card" style="border-left: 5px solid #16a34a;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🥕 Vegetales</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Zanahorias, brócoli, espinacas. Rica en fibra.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #16a34a;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🐟 Pescado</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Salmón, atún. Omega-3 para el corazón.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #16a34a;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🥛 Lácteos</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Leche, yogur bajo en grasa. Calcio.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #16a34a;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🍎 Frutas</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Manzanas, plátanos, naranjas. Vitaminas.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #16a34a;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🥜 Proteínas</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Pollo, huevos, legumbres. Fortaleza.</p>
+    </div>
+    <h3 style="font-weight: bold; color: #1f2937; margin: 20px 0 8px 0;">🧹 Limpieza e Higiene +60</h3>
+    <div class="card" style="border-left: 5px solid #0284c7;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🛁 Higiene Personal</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Baño diario, cambio de ropa. Prevención.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #0284c7;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🪥 Cuidado Dental</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Cepillado 2x día, visitas anuales.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #0284c7;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">💇 Cuidado del Cabello</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Lavar 2-3 veces por semana.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #0284c7;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🏠 Higiene del Hogar</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Limpiar superficies, desinfectar.</p>
+    </div>
+    <h3 style="font-weight: bold; color: #1f2937; margin: 20px 0 8px 0;">⚠️ Ir al Doctor</h3>
+    <div class="card" style="border-left: 5px solid #ef4444;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">🚨 Síntomas de Alerta</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Si sientes dolor en el pecho, dificultad para respirar, mareos severos.</p>
+    </div>
+    <div class="card" style="border-left: 5px solid #ef4444;">
+     <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">📅 Revisiones Regulares</p>
+     <p style="font-size: 13px; color: #6b7280; margin: 0;">Visita a tu doctor cada 3-6 meses para chequeos preventivos.</p>
+    </div>
+   </div>
+  </div><!-- EMERGENCY -->
+  <div id="emergency" class="screen gradient-bg-emerald" style="padding-top: 80px; padding-bottom: 40px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10;">
+    <div class="header-back"><button class="back-btn" onclick="goBack()">←</button>
+     <h2>Mis Familiares</h2>
+    </div>
+   </div>
+   <div style="padding: 16px; background:FF0000;">
+    <div class="emergency-numbers">
+     <h4 style="color: white; font-weight: bold; margin: 0 0 12px 0;">📞 Teléfonos de Emergencia</h4>
+     <div class="emergency-number">
+      <p>    🏥   Ambulancia: 911</p><button onclick="callEmergency('911')">Llamar</button>
+     </div>
+     <div class="emergency-number">
+      <p>🏥 IMSS: 115</p><button onclick="callEmergency('115')">Llamar</button>
+     </div>
+    </div><button class="btn btn-primary" onclick="goToScreen('addFamily')" style="margin-bottom: 16px; width: 100%; margin-top: 16px;">➕ Añadir Familiar</button>
+    <h3 style="font-weight: bold; color: #1f2937; margin: 16px 0 8px 0;">Mis Contactos</h3>
+    <div id="familyContainer" style="display: flex; flex-direction: column; gap: 10px;">
+     <p style="text-align: center; color: #9ca3af;">Sin familiares registrados</p>
+    </div>
+   </div>
+  </div><!-- ADD FAMILY -->
+  <div id="addFamily" class="screen gradient-bg-emerald" style="padding-top: 80px; padding-bottom: 80px;">
+   <div class="gradient-bg-emerald" style="position: fixed; top: 0; left: 0; right: 0; padding: 16px; z-index: 10;">
+    <div class="header-back"><button class="back-btn" onclick="goBack()">←</button>
+     <h2>Añadir Familiar</h2>
+    </div>
+   </div>
+   <div style="padding: 16px; background: transparent;">
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Nombre</label> <input type="text" id="familyName" class="input-field" placeholder="Juan García" autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Teléfono</label> <input type="tel" id="familyPhone" class="input-field" placeholder="+34 912 345 678" autocomplete="off">
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Parentesco</label> <select id="familyRelation" class="input-field" style="cursor: pointer;"> <option value="">Selecciona</option> <option value="Padre">Padre</option> <option value="Madre">Madre</option> <option value="Hijo">Hijo/a</option> <option value="Hermano">Hermano/a</option> <option value="Cónyuge">Cónyuge</option> <option value="Amigo">Amigo/a</option> <option value="Otro">Otro</option> </select>
+    </div>
+    <div class="content-section"><label style="font-weight: bold; font-size: 14px; color: #1f2937;">Edad</label> <input type="number" id="familyAge" class="input-field" placeholder="45" min="1" max="120" autocomplete="off">
+    </div><button class="btn btn-primary" onclick="saveFamily()" style="margin-top: 20px; margin-bottom: 20px; width: 100%;">Finalizar ✓</button>
+   </div>
+  </div><!-- Camera Modal -->
+  <div id="cameraModal" class="modal">
+   <div class="modal-content">
+    <h3 style="font-weight: bold; color: #1f2937; margin-bottom: 12px;">📸 Captura</h3>
+    <video id="cameraVideo" class="camera-preview" autoplay playsinline muted></video><img id="cameraImg" class="camera-preview" style="display: none;" alt="Foto">
+    <canvas id="cameraCanvas" style="display: none;"></canvas>
+    <div style="display: flex; gap: 8px; margin-top: 12px;"><button class="btn btn-primary" id="captureBtn" onclick="capturePhoto()" style="flex: 1;">📷 Capturar</button> <button class="btn" id="retakeBtn" onclick="retakePhoto()" style="flex: 1; background: #f3f4f6; color: #1f2937; display: none;">🔄 Retomar</button> <button class="btn btn-primary" id="confirmBtn" onclick="confirmPhoto()" style="flex: 1; display: none;">✓ Usar</button>
+    </div><button class="btn" onclick="closeCamera()" style="width: 100%; background: #f3f4f6; color: #1f2937; margin-top: 8px;">Cerrar</button>
+   </div>
+  </div><!-- Toast -->
+  <div id="toast" class="toast"></div>
+  <script>
+    let audioCtx = null;
+    let state = {
+      currentScreen: 'splash',
+      profile: null,
+      selectedSound: 0,
+      medications: [],
+      appointments: [],
+      family: [],
+      notes: [],
+      rating: 0,
+      steps: 0,
+      cameraType: null,
+      medPhoto: null,
+      profilePhoto: null,
+      currentStream: null,
+      stepGoalToday: 600,
+      lastStepCheck: 0
+    };
+
+    // Data SDK Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        if (data && data.length > 0) {
+          const profile = data.find(d => d.name);
+          if (profile) {
+            state.profile = {
+              name: profile.name || '',
+              age: profile.age || 0,
+              birthDate: profile.birthDate || '',
+              sex: profile.sex || '',
+              weight: profile.weight || 0,
+              height: profile.height || 0,
+              photo: profile.photo || null
+            };
+            updateProfileDisplay();
+          }
+        }
+      }
+    };
+
+    async function initDataSDK() {
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Error inicializando Data SDK:', result.error);
+        }
+      }
+    }
+
+    function updateProfileDisplay() {
+      if (state.profile) {
+        document.getElementById('headerUserName').textContent = state.profile.name || 'Mi Perfil';
+        document.getElementById('headerUserAge').textContent = state.profile.age ? `${state.profile.age} años` : '--';
+        document.getElementById('weightDisplay').textContent = state.profile.weight ? (state.profile.weight + ' kg') : '--';
+        document.getElementById('heightDisplay').textContent = state.profile.height ? (state.profile.height + ' cm') : '--';
+        
+        if (state.profile.photo) {
+          document.getElementById('headerProfilePhoto').src = state.profile.photo;
+        }
+      }
+    }
+
+    function showUserProfile() {
+      if (!state.profile) {
+        showToast('⚠️ Crea tu perfil primero');
+        return;
+      }
+      
+      document.getElementById('profileModalName').textContent = state.profile.name || '--';
+      document.getElementById('profileModalAge').textContent = `${state.profile.age} años` || '--';
+      document.getElementById('profileModalSex').textContent = state.profile.sex === 'M' ? '♂️ Hombre' : '♀️ Mujer';
+      document.getElementById('profileModalWeight').textContent = `${state.profile.weight} kg`;
+      document.getElementById('profileModalHeight').textContent = `${state.profile.height} cm`;
+      document.getElementById('profileModalBirth').textContent = state.profile.birthDate || '--';
+      
+      if (state.profile.photo) {
+        document.getElementById('profileModalPhoto').src = state.profile.photo;
+      }
+      
+      document.getElementById('profileModal').classList.add('active');
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profileModal').classList.remove('active');
+    }
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {}
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq, duration, volume = 0.3) {
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      try {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = freq;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(volume, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function testSound(index) {
+      const sequences = [
+        [[523.25, 0.3]],
+        [[523.25, 0.2], [587.33, 0.2], [659.25, 0.3]],
+        [[440, 0.2], [440, 0.2], [440, 0.2]],
+        [[880, 0.1], [880, 0.1], [880, 0.1], [880, 0.1]],
+        [[1046.50, 0.15], [1046.50, 0.15], [1046.50, 0.15]]
+      ];
+
+      let delay = 0;
+      const seq = sequences[index] || sequences[0];
+      seq.forEach(([freq, dur]) => {
+        setTimeout(() => playTone(freq, dur, 0.5), delay);
+        delay += (dur * 1000) + 50;
+      });
+    }
+
+    function playAlarmSound() {
+      const ctx = getAudioContext();
+      if (!ctx) return;
+
+      for (let i = 0; i < 12; i++) {
+        setTimeout(() => {
+          try {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.value = 800 + (Math.random() * 800);
+            osc.type = 'square';
+            gain.gain.setValueAtTime(0.8, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.3);
+          } catch (e) {}
+        }, i * 250);
+      }
+    }
+
+    function selectSound(index, btn) {
+      state.selectedSound = index;
+      document.querySelectorAll('.sound-btn').forEach(b => b.style.borderColor = '#e5e7eb');
+      btn.style.borderColor = '#10b981';
+    }
+
+    function selectSex(sex, btn) {
+      state.profile = { ...state.profile, sex };
+      document.querySelectorAll('.selector-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    function goToScreen(id) {
+      const screens = document.querySelectorAll('.screen');
+      screens.forEach(screen => {
+        screen.classList.remove('active');
+      });
+      
+      const next = document.getElementById(id);
+      if (next) {
+        next.classList.add('active');
+        state.currentScreen = id;
+      }
+
+      if (id === 'home') {
+        updateDateTime();
+        generateCalendar();
+      }
+      if (id === 'medList') updateMedicationsList();
+      if (id === 'appointments') updateAppointmentsList();
+      if (id === 'emergency') updateFamilyList();
+      if (id === 'progress') updateProgress();
+      if (id === 'notes') updateNotesList();
+    }
+
+    function goBack() {
+      goToScreen('home');
+    }
+
+    function generateCalendar() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const daysInMonth = lastDay.getDate();
+      const startingDayOfWeek = firstDay.getDay();
+
+      const daysOfWeek = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
+      const grid = document.getElementById('calendarGrid');
+      if (!grid) return;
+      
+      grid.innerHTML = '';
+
+      daysOfWeek.forEach(day => {
+        const dayEl = document.createElement('div');
+        dayEl.style.fontWeight = 'bold';
+        dayEl.style.color = '#6b7280';
+        dayEl.style.textAlign = 'center';
+        dayEl.style.fontSize = '12px';
+        dayEl.textContent = day;
+        grid.appendChild(dayEl);
+      });
+
+      for (let i = 0; i < startingDayOfWeek; i++) {
+        const emptyEl = document.createElement('div');
+        emptyEl.className = 'calendar-day other-month';
+        emptyEl.textContent = '';
+        grid.appendChild(emptyEl);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'calendar-day';
+        if (day === now.getDate()) {
+          dayEl.classList.add('today');
+        }
+        dayEl.textContent = day;
+        grid.appendChild(dayEl);
+      }
+    }
+
+    function updateDateTime() {
+      const now = new Date();
+      const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+      const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+      const el = document.getElementById('todayDate');
+      if (el) el.textContent = `${days[now.getDay()]}, ${now.getDate()} de ${months[now.getMonth()]}`;
+      const tel = document.getElementById('currentTime');
+      if (tel) tel.textContent = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+      
+      const dateStr = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
+      document.getElementById('stepsDate').textContent = dateStr;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function getMotivationMessage() {
+      const messages = [
+        '👍 ¡Vas muy bien! Sigue adelante',
+        '💪 ¡Increíble esfuerzo! Continúa así',
+        '✨ ¡Lo estás logrando! No te detengas',
+        '🏆 ¡Campeón! Sigue con esa energía',
+        '🌟 ¡Fantástico progreso! Adelante',
+        '   ¡Eres una máquina! Sigue así',
+        '🚀 ¡Despegando hacia la salud!',
+        '❤️ ¡Tu corazón te lo agradece!',
+        '🎉 ¡Excelente dedicación! Continúa',
+        '⭐ ¡Eres increíble! Sigue motivado'
+      ];
+      return messages[Math.floor(Math.random() * messages.length)];
+    }
+
+    async function saveProfile() {
+      const name = document.getElementById('userName').value.trim();
+      const age = parseInt(document.getElementById('userAge').value);
+      const day = parseInt(document.getElementById('birthDay').value);
+      const month = parseInt(document.getElementById('birthMonth').value);
+      const year = parseInt(document.getElementById('birthYear').value);
+      const weight = parseFloat(document.getElementById('userWeight').value);
+      const height = parseFloat(document.getElementById('userHeight').value);
+
+      if (!name || !age || !day || !month || !year || !weight || !height || !state.profile?.sex) {
+        showToast('⚠️ Completa todos');
+        return;
+      }
+
+      state.profile = {
+        name,
+        age,
+        birthDate: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
+        sex: state.profile.sex,
+        weight,
+        height,
+        photo: state.profilePhoto
+      };
+
+      if (window.dataSdk) {
+        const result = await window.dataSdk.create({
+          name,
+          age,
+          birthDate: state.profile.birthDate,
+          sex: state.profile.sex,
+          weight,
+          height,
+          photo: state.profilePhoto || '',
+          dailySteps: 0,
+          stepDate: new Date().toISOString().split('T')[0]
+        });
+        
+        if (!result.isOk) {
+          showToast('⚠️ Error al guardar perfil');
+          return;
+        }
+      }
+
+      showToast('✅ Perfil guardado');
+      goToScreen('profileCreated');
+      setTimeout(() => goToScreen('soundSetup'), 2000);
+    }
+
+    async function openCamera(type) {
+      state.cameraType = type;
+      const modal = document.getElementById('cameraModal');
+      modal.classList.add('active');
+
+      if (state.currentStream) {
+        state.currentStream.getTracks().forEach(track => track.stop());
+        state.currentStream = null;
+      }
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        showToast('❌ Tu navegador no soporta cámara');
+        modal.classList.remove('active');
+        return;
+      }
+
+      try {
+        const permStatus = await navigator.permissions.query({ name: 'camera' });
+        if (permStatus.state === 'denied') {
+          showToast('❌ Permisos de cámara denegados. Actívalos en configuración.');
+          modal.classList.remove('active');
+          return;
+        }
+      } catch (err) {
+        console.log('Verificación de permisos no disponible');
+      }
+
+      setTimeout(() => {
+        const video = document.getElementById('cameraVideo');
+        video.setAttribute('playsinline', 'true');
+        video.setAttribute('webkit-playsinline', 'true');
+        video.setAttribute('autoplay', 'true');
+        video.setAttribute('muted', 'true');
+        video.muted = true;
+        
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        const constraints = [
+          {
+            video: {
+              facingMode: type === 'profile' ? 'user' : (isMobile ? 'environment' : 'user'),
+              width: { ideal: 1280 },
+              height: { ideal: 720 }
+            },
+            audio: false
+          },
+          {
+            video: {
+              facingMode: type === 'profile' ? 'user' : (isMobile ? 'environment' : 'user')
+            },
+            audio: false
+          },
+          {
+            video: true,
+            audio: false
+          }
+        ];
+
+        const attemptCamera = (constraintsList) => {
+          if (constraintsList.length === 0) {
+            showToast('❌ No se pudo acceder a la cámara.');
+            modal.classList.remove('active');
+            return Promise.reject(new Error('No constraints'));
+          }
+
+          return navigator.mediaDevices.getUserMedia(constraintsList[0])
+            .then(stream => {
+              state.currentStream = stream;
+              video.srcObject = stream;
+              
+              video.onloadedmetadata = () => {
+                video.play().catch(err => {
+                  console.error('Error reproduciendo:', err);
+                  setTimeout(() => {
+                    video.play().catch(e => console.error(e));
+                  }, 500);
+                });
+              };
+
+              setTimeout(() => {
+                if (video.videoWidth === 0) {
+                  video.play().catch(err => console.error(err));
+                }
+              }, 1000);
+
+              showToast('✅ Cámara iniciada');
+            })
+            .catch(err => {
+              console.error('Error:', err);
+              return attemptCamera(constraintsList.slice(1));
+            });
+        };
+
+        attemptCamera(constraints).catch(err => {
+          console.error('Error final:', err);
+          showToast('❌ Cámara no disponible');
+        });
+      }, 300);
+    }
+
+    function capturePhoto() {
+      const video = document.getElementById('cameraVideo');
+      const canvas = document.getElementById('cameraCanvas');
+      const ctx = canvas.getContext('2d');
+
+      const width = video.videoWidth || video.offsetWidth || 1280;
+      const height = video.videoHeight || video.offsetHeight || 720;
+      
+      canvas.width = width;
+      canvas.height = height;
+      
+      try {
+        ctx.drawImage(video, 0, 0, width, height);
+        const photo = canvas.toDataURL('image/jpeg', 0.9);
+
+        if (state.cameraType === 'profile') {
+          state.profilePhoto = photo;
+          document.getElementById('profilePhotoImg').src = photo;
+        } else {
+          state.medPhoto = photo;
+        }
+
+        const img = document.getElementById('cameraImg');
+        img.src = photo;
+        img.style.display = 'block';
+        video.style.display = 'none';
+
+        document.getElementById('captureBtn').style.display = 'none';
+        document.getElementById('retakeBtn').style.display = 'block';
+        document.getElementById('confirmBtn').style.display = 'block';
+        
+        showToast('✅ Foto capturada');
+      } catch (err) {
+        console.error('Error:', err);
+        showToast('⚠️ Error al capturar');
+      }
+    }
+
+    function retakePhoto() {
+      document.getElementById('cameraVideo').style.display = 'block';
+      document.getElementById('cameraImg').style.display = 'none';
+      document.getElementById('captureBtn').style.display = 'block';
+      document.getElementById('retakeBtn').style.display = 'none';
+      document.getElementById('confirmBtn').style.display = 'none';
+    }
+
+    function confirmPhoto() {
+      closeCamera();
+      if (state.cameraType === 'med') {
+        document.getElementById('medPhotoImg').src = state.medPhoto;
+        document.getElementById('medPhotoImg').style.display = 'block';
+      }
+    }
+
+    function closeCamera() {
+      const modal = document.getElementById('cameraModal');
+      modal.classList.remove('active');
+      
+      if (state.currentStream) {
+        state.currentStream.getTracks().forEach(track => {
+          track.stop();
+        });
+        state.currentStream = null;
+      }
+      
+      const video = document.getElementById('cameraVideo');
+      video.srcObject = null;
+      video.pause();
+      
+      document.getElementById('cameraImg').style.display = 'none';
+      document.getElementById('cameraVideo').style.display = 'block';
+      document.getElementById('captureBtn').style.display = 'block';
+      document.getElementById('retakeBtn').style.display = 'none';
+      document.getElementById('confirmBtn').style.display = 'none';
+    }
+
+    function saveMedication() {
+      const name = document.getElementById('medName').value.trim();
+      const type = document.getElementById('medType').value.trim();
+      const freq = parseInt(document.getElementById('medFrequency').value);
+      const days = parseInt(document.getElementById('medDays').value);
+      const dose = document.getElementById('medDose').value.trim();
+      const reason = document.getElementById('medReason').value.trim();
+
+      if (!name || !type || !freq || !days || !dose || !reason) {
+        showToast('⚠️ Completa todos');
+        return;
+      }
+
+      state.medications.push({
+        id: Date.now(),
+        name,
+        type,
+        frequency: freq,
+        days,
+        dose,
+        reason,
+        photo: state.medPhoto,
+        taken: false
+      });
+
+      showToast('✅ Medicamento añadido');
+      document.getElementById('medName').value = '';
+      document.getElementById('medType').value = '';
+      document.getElementById('medFrequency').value = '';
+      document.getElementById('medDays').value = '';
+      document.getElementById('medDose').value = '';
+      document.getElementById('medReason').value = '';
+      document.getElementById('medPhotoImg').style.display = 'none';
+      state.medPhoto = null;
+
+      goToScreen('medList');
+    }
+
+    function updateMedicationsList() {
+      const cont = document.getElementById('medListContainer');
+      if (state.medications.length === 0) {
+        cont.innerHTML = '<p style="text-align: center; color: #9ca3af; margin-top: 20px;">Sin medicamentos</p>';
+        return;
+      }
+
+      cont.innerHTML = state.medications.map((m, i) => `
+        <div class="med-item" style="position: relative;">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+              <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">💊 ${m.name}</p>
+              <p style="font-size: 12px; color: #6b7280; margin: 0;">Tipo: ${m.type}</p>
+              <p style="font-size: 12px; color: #6b7280; margin: 0;">Cada ${m.frequency}h por ${m.days} días</p>
+              <p style="font-size: 12px; color: #6b7280; margin: 0;">Dosis: ${m.dose}</p>
+              <p style="font-size: 12px; color: #6b7280; margin: 0;">Para: ${m.reason}</p>
+            </div>
+            <button onclick="deleteMedication(${i})" class="delete-btn">×</button>
+          </div>
+          <button class="btn btn-primary" onclick="markMedicationTaken(${i})" style="margin-top: 8px; padding: 8px; font-size: 13px; width: 100%;">
+            ${m.taken ? '✓ Tomado' : 'Marcar Tomado'}
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function deleteMedication(i) {
+      state.medications.splice(i, 1);
+      updateMedicationsList();
+      showToast('🗑️ Eliminado');
+    }
+
+    function markMedicationTaken(i) {
+      state.medications[i].taken = true;
+      testSound(state.selectedSound);
+      showToast(`✅ ${state.medications[i].name} tomado`);
+      updateMedicationsList();
+      updateProgress();
+    }
+
+    function saveAppointment() {
+      const doc = document.getElementById('doctorName').value.trim();
+      const date = document.getElementById('appointmentDate').value;
+      const time = document.getElementById('appointmentTime').value;
+      const hosp = document.getElementById('hospitalName').value.trim();
+
+      if (!doc || !date || !time || !hosp) {
+        showToast('⚠️ Completa todos');
+        return;
+      }
+
+      state.appointments.push({
+        id: Date.now(),
+        doctor: doc,
+        date,
+        time,
+        hospital: hosp,
+        reminder: document.getElementById('apptReminder').classList.contains('active')
+      });
+
+      showToast('✅ Cita guardada');
+      document.getElementById('doctorName').value = '';
+      document.getElementById('appointmentDate').value = '';
+      document.getElementById('appointmentTime').value = '';
+      document.getElementById('hospitalName').value = '';
+      goToScreen('appointments');
+    }
+
+    function updateAppointmentsList() {
+      const cont = document.getElementById('appointmentsContainer');
+      if (state.appointments.length === 0) {
+        cont.innerHTML = '<p style="text-align: center; color: #9ca3af; margin-top: 20px;">Sin citas</p>';
+        return;
+      }
+
+      cont.innerHTML = state.appointments.map((a, i) => {
+        const d = new Date(a.date).toLocaleDateString('es-ES');
+        return `
+          <div class="card" style="border-left: 5px solid #10b981; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">👨‍⚕️ Dr. ${a.doctor}</p>
+                <p style="font-size: 12px; color: #6b7280; margin: 0;">📅 ${d} a las ${a.time}</p>
+                <p style="font-size: 12px; color: #6b7280; margin: 0;">🏥 ${a.hospital}</p>
+              </div>
+              <button onclick="deleteAppointment(${i})" class="delete-btn">×</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function deleteAppointment(i) {
+      state.appointments.splice(i, 1);
+      updateAppointmentsList();
+      showToast('🗑️ Eliminada');
+    }
+
+    function updateProgress() {
+      const taken = state.medications.filter(m => m.taken).length;
+      const total = state.medications.length;
+      document.getElementById('medsProgressDisplay').textContent = `${taken}/${total}`;
+
+      const stars = document.querySelectorAll('.star');
+      let rating = 0;
+      if (total > 0) {
+        rating = Math.ceil((taken / total) * 5);
+      }
+      if (state.steps >= state.stepGoalToday) {
+        rating = Math.min(5, rating + 1);
+      }
+
+      stars.forEach((s, i) => {
+        if (i < rating) s.classList.add('filled');
+        else s.classList.remove('filled');
+      });
+
+      const msg = document.getElementById('ratingMessage');
+      let msgText = '⚠️ Completa objetivos';
+      
+      if (rating === 5 && total > 0 && state.steps >= state.stepGoalToday) {
+        msgText = '🎉 ¡EXCELENTE! ¡CAMPEÓN!';
+      } else if (rating >= 4) {
+        msgText = '💪 ¡Vas increíble!';
+      } else if (rating >= 3) {
+        msgText = '👍 ¡Muy bien!';
+      } else if (rating > 0) {
+        msgText = '📈 Sigue adelante';
+      }
+      
+      msg.textContent = msgText;
+
+      const motivationContainer = document.getElementById('motivationContainer');
+      if (rating >= 3 && motivationContainer) {
+        motivationContainer.innerHTML = `<div class="motivation-msg">${getMotivationMessage()}</div>`;
+      }
+    }
+
+    function rateStar(r) {
+      state.rating = r;
+      document.querySelectorAll('.star').forEach((s, i) => {
+        if (i < r) s.classList.add('filled');
+        else s.classList.remove('filled');
+      });
+      showToast(`⭐ ${r} estrellas`);
+    }
+
+    function saveFamily() {
+      const name = document.getElementById('familyName').value.trim();
+      const phone = document.getElementById('familyPhone').value.trim();
+      const rel = document.getElementById('familyRelation').value;
+      const age = parseInt(document.getElementById('familyAge').value);
+
+      if (!name || !phone || !rel || !age) {
+        showToast('⚠️ Completa todos');
+        return;
+      }
+
+      state.family.push({
+        id: Date.now(),
+        name,
+        phone,
+        relation: rel,
+        age
+      });
+
+      showToast('✅ Familiar guardado');
+      document.getElementById('familyName').value = '';
+      document.getElementById('familyPhone').value = '';
+      document.getElementById('familyRelation').value = '';
+      document.getElementById('familyAge').value = '';
+      goToScreen('emergency');
+    }
+
+    function updateFamilyList() {
+      const cont = document.getElementById('familyContainer');
+      if (state.family.length === 0) {
+        cont.innerHTML = '<p style="text-align: center; color: #9ca3af;">Sin familiares registrados</p>';
+        return;
+      }
+
+      cont.innerHTML = state.family.map((f, i) => `
+        <div class="card" style="border-left: 5px solid #10b981; position: relative;">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div style="flex: 1;">
+              <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">${f.name}</p>
+              <p style="font-size: 12px; color: #6b7280; margin: 0;">📱 ${f.phone}</p>
+              <p style="font-size: 12px; color: #6b7280; margin: 0;">👥 ${f.relation} (${f.age} años)</p>
+            </div>
+            <button onclick="deleteFamily(${i})" class="delete-btn">×</button>
+          </div>
+          <button class="btn btn-primary" onclick="callFamily('${f.phone}')" style="margin-top: 8px; padding: 8px; font-size: 13px; width: 100%;">📞 Llamar</button>
+        </div>
+      `).join('');
+    }
+
+    function deleteFamily(i) {
+      state.family.splice(i, 1);
+      updateFamilyList();
+      showToast('🗑️ Eliminado');
+    }
+
+    function callFamily(phone) {
+      showToast(`📞 Llamando a ${phone}...`);
+      window.location.href = `tel:${phone}`;
+    }
+
+    function callEmergency(number) {
+      showToast(`🚑 Llamando a ${number}...`);
+      window.location.href = `tel:${number}`;
+    }
+
+    function saveNote() {
+      const text = document.getElementById('noteText').value.trim();
+      if (!text) {
+        showToast('⚠️ Escribe algo');
+        return;
+      }
+      state.notes.push({
+        id: Date.now(),
+        text,
+        date: new Date().toLocaleDateString('es-ES')
+      });
+      document.getElementById('noteText').value = '';
+      showToast('✅ Nota guardada');
+      updateNotesList();
+    }
+
+    function updateNotesList() {
+      const cont = document.getElementById('notesContainer');
+      if (state.notes.length === 0) {
+        cont.innerHTML = '<p style="text-align: center; color: #9ca3af;">Sin notas</p>';
+        return;
+      }
+      cont.innerHTML = state.notes.map((n, i) => `
+        <div class="card" style="position: relative;">
+          <p style="font-weight: bold; color: #1f2937; margin: 0 0 4px 0;">📝 ${n.date}</p>
+          <p style="font-size: 13px; color: #6b7280; margin: 0;">${n.text}</p>
+          <button onclick="deleteNote(${i})" class="delete-btn">×</button>
+        </div>
+      `).join('');
+    }
+
+    function deleteNote(i) {
+      state.notes.splice(i, 1);
+      updateNotesList();
+      showToast('🗑️ Nota eliminada');
+    }
+
+    function triggerSOS() {
+      if (state.family.length === 0) {
+        showToast('⚠️ Agrega familiares primero');
+        return;
+      }
+
+      playAlarmSound();
+      showToast('🚨 ¡¡PÁNICO ACTIVADO!! 🚨');
+
+      if (navigator.vibrate) {
+        for (let i = 0; i < 5; i++) {
+          navigator.vibrate([500, 300]);
+        }
+      }
+
+      state.family.forEach(f => {
+        const message = 'EMERGENCIA: Necesito ayuda. Por favor llama al 911 o 115 inmediatamente.';
+        const phoneNumber = f.phone.replace(/\D/g, '');
+        
+        setTimeout(() => {
+          window.location.href = `tel:${phoneNumber}`;
+        }, 500);
+
+        setTimeout(() => {
+          const smsNumber = f.phone.replace(/\s/g, '');
+          window.location.href = `sms:${smsNumber}?body=${encodeURIComponent(message)}`;
+        }, 2000);
+      });
+    }
+
+    function detectSteps() {
+      if (!navigator.deviceMotion && !navigator.accelerometer) {
+        console.log('Acelerómetro no disponible');
+        return;
+      }
+
+      let lastTime = 0;
+      let stepDetected = false;
+
+      const handleMotion = (event) => {
+        const accel = event.accelerationIncludingGravity;
+        const x = accel.x || 0;
+        const y = accel.y || 0;
+        const z = accel.z || 0;
+
+        const magnitude = Math.sqrt(x * x + y * y + z * z);
+        const currentTime = Date.now();
+
+        if (magnitude > 20 && !stepDetected && (currentTime - lastTime) > 300) {
+          state.steps++;
+          lastTime = currentTime;
+          stepDetected = true;
+
+          document.getElementById('stepsDisplay').textContent = state.steps.toLocaleString('es-ES');
+
+          setTimeout(() => {
+            stepDetected = false;
+          }, 500);
+        }
+      };
+
+      if (typeof window.DeviceMotionEvent !== 'undefined') {
+        if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+          DeviceMotionEvent.requestPermission().then(permissionState => {
+            if (permissionState === 'granted') {
+              window.addEventListener('devicemotion', handleMotion);
+            }
+          }).catch(console.error);
+        } else {
+          window.addEventListener('devicemotion', handleMotion);
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initDataSDK();
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+      detectSteps();
+      goToScreen('splash');
+    });
+
+    window.addEventListener('beforeunload', () => {
+      if (state.currentStream) {
+        state.currentStream.getTracks().forEach(track => track.stop());
+      }
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ca1e21331d9eddf',t:'MTc3MDQ1Njc3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
